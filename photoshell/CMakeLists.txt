@@ -1,7 +1,7 @@
 set(src ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 add_executable(${photoshell_target} 
-    ${src}/entrypoint.c
+    ${src}/editor.c
 )
 
 target_link_libraries(${photoshell_target} PUBLIC ${core_target})

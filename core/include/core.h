@@ -1,6 +1,6 @@
 #ifndef FOO_H
 #define FOO_G
 
-extern int foo();
+#include "base/types.h"
 
 #endif//FOO_H
