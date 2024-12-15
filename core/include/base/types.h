@@ -18,6 +18,6 @@ typedef float f32;
 typedef double f64;
 typedef long double f96;
 
-typedef enum { false, true } bool;
+typedef enum : u8 { false, true } bool;
 
 #endif //TYPES_H

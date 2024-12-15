@@ -6,19 +6,27 @@
 
 #include "tests.h"
 
-#ifdef PS_LINUX
+#ifdef PLATFORM_LINUX
 
 #include <errors.h>
-#include <tests.h>
 #include <stdio.h>
+#include <application.h>
 
-int main(int argc, char** argv){
-
-    const Error e = PS_INIT_TESTS();
+int main(int argc, char** argv) {
+    const Error e = INIT_TESTS();
 
     if(e.code != ERROR_NONE) {
         fprintf(stderr, "Error detected: %s", e.msg);
+        if(e.fatal) return e.code;
     }
+
+    EntryparamList epl = entryparamlist_constrcut(argc, argv);
+    Application app = application_construct(&epl);
+
+
+
+    application_destruct(&app);
+    entryparamlist_destruct(&epl);
 
     return 0;
 }

@@ -6,14 +6,14 @@
 
 #include <tests.h>
 
-#ifdef PS_TESTS
+#ifdef ENABLE_TESTS
 
 #include <base/types.h>
 #include <string.h>
 
 #define TEST(exp) { error.code |= ((exp)?ERROR_NONE:ERROR_TEST); strcpy(error.msg, #exp);}
 
-Error _run_init_tests() {
+Error _init_tests() {
    Error error;
 
    error.code = ERROR_NONE;

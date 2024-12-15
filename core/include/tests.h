@@ -7,16 +7,16 @@
 #ifndef TESTS_H
 #define TESTS_H
 
-#ifdef PS_TESTS
+#ifdef ENABLE_TESTS
 
 #include <errors.h>
 
-extern Error _run_init_tests(); /* Tests executed right after entrypoint */
+extern Error _init_tests(); /* Tests executed right after entrypoint */
 
 // Defines
-    #define PS_INIT_TESTS() _run_init_tests()
+    #define INIT_TESTS() _init_tests()
 #else
-    #define PS_INIT_TESTS() {}
+    #define INIT_TESTS() {}
 #endif
 
 #endif //TESTS_H

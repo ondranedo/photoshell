@@ -17,6 +17,7 @@ typedef enum : u8 {
 typedef struct {
     ErrorCode code;
     char msg[32]; // It's OK, used for debugging purposes anyway;
+    bool fatal;
 } Error;
 
-#endif //ERRORS_H
+#endif//ERRORS_H

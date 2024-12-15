@@ -1,5 +1,5 @@
 #ifndef FOO_H
-#define FOO_G
+#define FOO_H
 
 #include "base/types.h"
 
