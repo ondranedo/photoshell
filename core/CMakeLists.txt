@@ -16,8 +16,7 @@ add_library(${core_target} SHARED
         ${src}/tests.c
         ${src}/application.c
         ${src}/string.c
-        ${src}/entryparam/entryparam.h
-        ${src}/entryparam/entryparam.c
+        ${src}/entryparam.c
 )
 
 target_include_directories(${core_target} PUBLIC ${core_include})
