@@ -6,7 +6,7 @@
 
 #include <entryparam.h>
 
-<<<<<<< HEAD
+
 // TODO: Remove
 #include <stdlib.h>
 #include <string.h>
@@ -137,7 +137,7 @@ void entryparamlist_print(EntryparamList* self) {
     }
 }
 
-=======
+
 static const Entryparam entryparam_list[] = {
     {"version", 'v', ENTRYPARAM_VOID, 0},
     {"help", 'h', ENTRYPARAM_VOID,  0},
@@ -154,4 +154,4 @@ EntryparamList entryparamlist_constrcut(int argc, char** argv) {
 void entryparamlist_destruct(EntryparamList* self) {
 
 }
->>>>>>> parent of 9ae8c7e (Entry params)
+

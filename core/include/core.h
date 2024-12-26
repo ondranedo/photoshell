@@ -3,4 +3,6 @@
 
 #include "base/types.h"
 
+#define API extern
+
 #endif//FOO_H

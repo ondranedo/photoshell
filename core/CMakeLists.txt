@@ -15,11 +15,8 @@ add_library(${core_target} SHARED
         ${src}/tests.c
         ${src}/entryparam.c
         ${src}/application.c
-<<<<<<< HEAD
         ${src}/string.c
         ${src}/entryparam.c
-=======
->>>>>>> parent of 9ae8c7e (Entry params)
 )
 
 target_include_directories(${core_target} PUBLIC ${core_include})
