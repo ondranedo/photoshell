@@ -13,8 +13,8 @@ typedef struct {
     void* data;
 } Application;
 
-extern Application application_construct(EntryparamList* ep);
+API Application application_construct(EntryparamList* ep);
 
-extern void application_destruct(Application* self);
+API void application_destruct(Application* self);
 
 #endif //APPLICATION_H
