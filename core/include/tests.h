@@ -7,11 +7,13 @@
 #ifndef TESTS_H
 #define TESTS_H
 
+#ifdef ENABLE_TESTS
+
 #include <errors.h>
 
-API Error _init_tests(); /* Tests executed right after entrypoint */
+extern Error _init_tests(); /* Tests executed right after entrypoint */
 
-#ifdef ENABLE_TESTS
+// Defines
     #define INIT_TESTS() _init_tests()
 #else
     #define INIT_TESTS() {}

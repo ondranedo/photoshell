@@ -4,37 +4,35 @@
  *  Created: 2024/11/14
  */
 
-#ifdef __GNUC__
+#include "tests.h"
 
-#define ATTRIBUTE_CONSTRUCTOR __attribute__ ((constructor))
-#define ATTRIBUTE_DECONSTRUCTOR __attribute__ ((destructor))
+#ifdef PLATFORM_LINUX
 
-#else
- #define ATTRIBUTE_CONSTRUCTOR __attribute__ ((constructor))
- #define ATTRIBUTE_DECONSTRUCTOR  __attribute__ ((destructor))
-
- #warning 'Untested compiler! Only GCC supported /GCC tested/; see https://github.com/ondranedo/photoshell'
-#endif
-
-#include <tests.h>
+#include <errors.h>
 #include <stdio.h>
-#include <stdlib.h>
+#include <application.h>
 
-void ATTRIBUTE_CONSTRUCTOR core_init() {
+int main(int argc, char** argv) {
     const Error e = INIT_TESTS();
 
     if(e.code != ERROR_NONE) {
-        //TODO: Replace with internal logger
-        printf("[CORE INIT] [ERROR]: %s\n", e.msg);
-        if(e.fatal) exit(e.code);
+        fprintf(stderr, "Error detected: %s", e.msg);
+        if(e.fatal) return e.code;
     }
+
+    EntryparamList epl = entryparamlist_constrcut(argc, argv);
+    Application app = application_construct(&epl);
+
+
+
+    application_destruct(&app);
+    entryparamlist_destruct(&epl);
+
+    return 0;
 }
 
-void ATTRIBUTE_DECONSTRUCTOR core_release() {
+#else
 
-}
+#error "Undefined platform! Only Linux supported /ARCH tested/; see https://github.com/ondranedo/photoshell"
 
-
-
-
-
+#endif

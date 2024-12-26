@@ -2,7 +2,7 @@
 cmake_minimum_required(VERSION 3.29)
 project(Photoshell)
 
-# VARIABLES
+# Setting VARIABLES
 ## General
 option(run_tests "Run Photosehll tests" true)
 
@@ -16,19 +16,17 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${build}/lib)
 set(CMAKE_C_STANDARD 90)
 set(CMAKE_C_STANDARD_REQUIRED true)
 
-# COMPILE DEFINITIONS
-## Platform
+# Setting DEFINES
 if(UNIX AND NOT APPLE)
     add_compile_definitions(PLATFORM_LINUX)
 endif()
 
-## Tests
 if(run_tests)
     add_compile_definitions(ENABLE_TESTS)
 endif()
 
-# SUBDIRECTORIES
-## Targets
+# Subdirectories
+## BINARY FILE names
 set(core_target core)
 set(photoshell_target photoshell)
 

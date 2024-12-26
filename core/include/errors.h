@@ -11,8 +11,7 @@
 
 typedef enum : u8 {
     ERROR_NONE = 0x00,
-    ERROR_TEST = 0x01,
-    ERROR_NIL
+    ERROR_TEST = 0x01
 } ErrorCode;
 
 typedef struct {

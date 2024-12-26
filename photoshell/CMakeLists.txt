@@ -5,4 +5,4 @@ add_executable(${photoshell_target}
 )
 
 target_link_libraries(${photoshell_target} PUBLIC ${core_target})
-target_include_directories(${photoshell_target} PUBLIC ${core_include})
+target_include_directories(${photoshell_target} PRIVATE ${core_include})
