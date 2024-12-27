@@ -4,27 +4,48 @@
  *  Created: 2024/12/15
  */
 
-#ifndef ENTRYPARAMETERS_H
-#define ENTRYPARAMETERS_H
+#ifndef ENTRYPARAM_H
+#define ENTRYPARAM_H
 
 #include <core.h>
-
-typedef enum : u16 {
-    //  xxxx xxxx xxxx xABB
-    //  x - unused A - Required B - Number / String
-    ENTRYPARAM_VOID     = 0x000,
-    ENTRYPARAM_STRING   = 0x001,
-    ENTRYPARAM_NUMBER   = 0x010,
-    ENTRYPARAM_REQUIRED = 0x100,
-   } EntryparamTraits;
+#include <errors.h>
 
 typedef enum : u8 {
-    ENTRYPARAM_INPUT,
-    ENTRYPARAM_OUTPUT,
-    ENTRYPARAM_VERSION,
-    ENTRYPARAM_HELP,
-    ENTRYPARAM_NIL
+    // xxxCUABB(u8)
+    ENTRYPARAM_VOID        = 0b00000000,
+    ENTRYPARAM_STRING      = 0b00000001, // B
+    ENTRYPARAM_NUMBER      = 0b00000010, // B
+    ENTRYPARAM_REQUIRED    = 0b00000100, // A
+    ENTRYPARAM_UNIQUE      = 0b00001000, // U
+    ENTRYPARAM_UNAMBIGUOUS = 0b00010000, // C
+} EntryparamTraits;
+
+typedef enum : u8 {
+    ENTRYPARAM_INPUT,    // Sets image input path
+    ENTRYPARAM_OUTPUT,   // Sets image output path
+    ENTRYPARAM_VERSION,  // Prints version
+    ENTRYPARAM_HELP,     // Prints help
+    ENTRYPARAM_NIL       // Do not use
    } EntryparamType;
+
+const char* entryparamtype_to_string(EntryparamType entry_param);
+
+typedef struct {
+    const char* long_name;
+    const char short_name;
+    const EntryparamType type;
+    const EntryparamTraits traits;
+} EntryparamTemplate;
+
+API void entryparamtemplate_set(const EntryparamTemplate* template);
+
+EntryparamType entryparamtemplate_string_to_type(const char* name);
+
+EntryparamTraits entryparamtemplate_type_to_traits(const EntryparamType type);
+
+u128 entryparamtemplate_count_traits(EntryparamTraits traits);
+
+u128 entryparamtemplate_get_specific_types(EntryparamType* type, u128 max_count, EntryparamTraits traits);
 
 typedef struct {
     EntryparamType type;
@@ -40,20 +61,17 @@ Entryparam entryparam_construct_number(EntryparamType type, double number);
 
 bool entryparam_isvalid_name(const char* name);
 
-EntryparamType entryparam_get_type(const char* name);
-
-EntryparamTraits entryparam_get_traits(const EntryparamType type);
-
 typedef struct {
     Entryparam* list;
     u64 count;
 } EntryparamList;
 
-
-API EntryparamList entryparamlist_constrcut(int argc, char** argv);
+API EntryparamList entryparamlist_construct(int argc, char** argv);
 
 API void entryparamlist_destruct(EntryparamList* self);
 
 API void entryparamlist_print(EntryparamList* self);
 
-#endif //ENTRYPARAMETERS_H
+API Error entryparamlist_validate(EntryparamList* list);
+
+#endif //ENTRYPARAM_H

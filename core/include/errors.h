@@ -9,14 +9,18 @@
 
 #include <core.h>
 
+#define ERROR_MSG_MAX_SIZE 256
+
 typedef enum : u8 {
-    ERROR_NONE = 0x00,
-    ERROR_TEST = 0x01
+    ERROR_NONE,
+    ERROR_TEST,
+    ERROR_ARGC,
+    ERROR_NIL
 } ErrorCode;
 
 typedef struct {
     ErrorCode code;
-    char msg[32]; // It's OK, used for debugging purposes anyway;
+    char msg[ERROR_MSG_MAX_SIZE];  // It's OK, used for debugging purposes anyway;
     bool fatal;
 } Error;
 
