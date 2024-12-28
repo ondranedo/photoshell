@@ -8,7 +8,7 @@
 #define ENTRYPARAM_H
 
 #include <core.h>
-#include <errors.h>
+#include <error.h>
 
 typedef enum : u8 {
     // xxxCUABB(u8)
@@ -72,6 +72,6 @@ API void argumentlist_destruct(ArgumentList* self);
 
 API void argumentlist_print(ArgumentList* self);
 
-API Error argumentlist_validate(ArgumentList* list);
+API void argumentlist_validate(ArgumentList* list);
 
 #endif //ENTRYPARAM_H

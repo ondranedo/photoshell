@@ -8,13 +8,17 @@
 #define APPLICATION_H
 
 #include <arguments.h>
+#include <error.h>
 
 typedef struct {
-    void* data;
+    ArgumentList argument_list;
+    bool running:1,valid:1;
 } Application;
 
-extern Application application_construct(ArgumentList* ep);
+API Application application_construct(int argc, char** argv);
 
-extern void application_destruct(Application* self);
+API void application_run(Application* self);
+
+API void application_destruct(Application* self);
 
 #endif //APPLICATION_H

@@ -5,7 +5,7 @@
  */
 
 #include <arguments.h>
-
+#include <error.h>
 
 // TODO: Remove
 #include <stdlib.h>
@@ -157,24 +157,25 @@ void argumentlist_print(ArgumentList* self) {
     u128 i = 0;
     for(;i < self->count; ++i) {
         if(argumenttemplate_type_to_traits(self->list[i].type) & ENTRYPARAM_NUMBER)
+            //TODO: Add Logger
             printf("(%s) %lf\n", argumenttype_to_string(self->list[i].type), self->list[i].payload.number);
         else
         if(argumenttemplate_type_to_traits(self->list[i].type) & ENTRYPARAM_STRING)
+            //TODO: Add Logger
             printf("(%s) %s\n", argumenttype_to_string(self->list[i].type), self->list[i].payload.string);
         else
+            //TODO: Add Logger
             printf("(%s)\n", argumenttype_to_string(self->list[i].type));
     }
 }
 
-static inline Error _validate_required(ArgumentList* list, ArgumentType* required) {
-    Error error = {ERROR_NONE, "", false };
+static inline void _validate_required(ArgumentList* list, ArgumentType* required) {
     u128 i = 0, j = 0;
+    char buff[ERROR_MSG_MAX_SIZE];
+
     if(list->count == 0 && argumenttemplate_count_traits(ENTRYPARAM_REQUIRED) > 0) {
-        //TODO Error logger.
-        snprintf(error.msg, ERROR_MSG_MAX_SIZE, "Program missing input.");
-        error.fatal = true;
-        error.code = ERROR_ARGC;
-        return error;
+        snprintf(buff, ERROR_MSG_MAX_SIZE, "Program missing input.");
+        error_throw(ERROR_ARGC, buff, true);
     }
 
     for(;i < list->count; ++i) {
@@ -184,75 +185,56 @@ static inline Error _validate_required(ArgumentList* list, ArgumentType* require
 
     for(i = 0; i < argumenttemplate_count_traits(ENTRYPARAM_REQUIRED); ++i) {
         if(required[i] == ENTRYPARAM_VOID) continue;
-        //TODO Error logger.
-        snprintf(error.msg, ERROR_MSG_MAX_SIZE, "REQUIRED argument trait violated with argument \'%s\'.", argumenttype_to_string(required[i]));
-        error.fatal = true;
-        error.code = ERROR_ARGC;
-        return error;
+        snprintf(buff, ERROR_MSG_MAX_SIZE, "REQUIRED argument trait violated with argument \'%s\'.", argumenttype_to_string(required[i]));
+        error_throw(ERROR_ARGC, buff, true);
     }
-
-    return error;
 }
 
-static inline Error _validate_unique(ArgumentList* list, ArgumentType* unique) {
-    Error error = {ERROR_NONE, "", false };
+static inline void _validate_unique(ArgumentList* list, ArgumentType* unique) {
     u128 i = 0, j = 0, unique_count = 0;
-
+    char buff[ERROR_MSG_MAX_SIZE];
     for(;i < list->count; ++i) {
         // Validate Unique
         if(argumenttemplate_type_to_traits(list->list[i].type) & ENTRYPARAM_UNIQUE) {
             for(j = 0; j < unique_count; ++j)
                 if(unique[j] == list->list[i].type) {
-                    //TODO Error logger.
-                    snprintf(error.msg, ERROR_MSG_MAX_SIZE, "UNIQUE argument trait violated with argument \'%s\'.", argumenttype_to_string(unique[j]));
-                    error.fatal = true;
-                    error.code = ERROR_ARGC;
-                    return error;
+                    snprintf(buff, ERROR_MSG_MAX_SIZE, "UNIQUE argument trait violated with argument \'%s\'.", argumenttype_to_string(unique[j]));
+                    error_throw(ERROR_ARGC, buff, true);
                 }
             unique[unique_count++] = list->list[i].type;
         }
     }
-
-    return error;
 }
 
-static inline Error _validate_unambiguous(ArgumentList* list, bool* validate_required) {
-    Error error = { ERROR_NONE, "", false };
+static inline void _validate_unambiguous(ArgumentList* list, bool* validate_required) {
     u128 i = 0;
+    char buff[ERROR_MSG_MAX_SIZE];
     for(;i < list->count; ++i) {
         // Valida Unambiguous
         if(argumenttemplate_type_to_traits(list->list[i].type) & ENTRYPARAM_UNAMBIGUOUS) {
             if(list->count > 1) { // TODO: Set conflicting arguments instead of '> 1'
-                //TODO Error logger.
-                snprintf(error.msg, ERROR_MSG_MAX_SIZE, "UNAMBIGUOUS argument trait violated with argument \'%s\'.", argumenttype_to_string(list->list[i].type));
-                error.code = ERROR_ARGC;
-                error.fatal = true;
-                return error;
+                snprintf(buff, ERROR_MSG_MAX_SIZE, "UNAMBIGUOUS argument trait violated with argument \'%s\'.", argumenttype_to_string(list->list[i].type));
+                error_throw(ERROR_ARGC, buff, true);
             }
-
             *validate_required = false;
         }
     }
-    return error;
 }
 
-Error argumentlist_validate(ArgumentList* list) {
+void argumentlist_validate(ArgumentList* list) {
     ArgumentType* required = (ArgumentType*)malloc(argumenttemplate_count_traits(ENTRYPARAM_REQUIRED)*sizeof(ArgumentType));
     ArgumentType* unique = (ArgumentType*)malloc(argumenttemplate_count_traits(ENTRYPARAM_UNIQUE)*sizeof(ArgumentType));
     u128 i = 0, j = 0;
-    Error error = {ERROR_NONE, "", false };
     bool validate_required = true;
 
     argumenttemplate_get_specific_types(required, argumenttemplate_count_traits(ENTRYPARAM_REQUIRED), ENTRYPARAM_REQUIRED);
 
-    error = _validate_unique(list, unique);
-    if(error.code == ERROR_NONE)
-        error = _validate_unambiguous(list, &validate_required);
-    if(validate_required && error.code == ERROR_NONE)
-        error = _validate_required(list, required);
+    _validate_unique(list, unique);
+
+    _validate_unambiguous(list, &validate_required);
+    if(validate_required)
+       _validate_required(list, required);
 
     free(required);
     free(unique);
-
-    return error;
 }

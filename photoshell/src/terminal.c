@@ -1,8 +1,4 @@
 #include <application.h>
-#include <tests.h>
-
-// TODO: Remove
-#include <stdio.h>
 
 ArgumentTemplate template[] = {
     {"version", 'v', ENTRYPARAM_VERSION, ENTRYPARAM_VOID | ENTRYPARAM_UNAMBIGUOUS},
@@ -20,21 +16,12 @@ int main(int argc, char** argv) {
     int targc = 0; while(targv[targc++][0] != '#');
 
     argumenttemplate_set(template);
-    ArgumentList al = argumentlist_construct(targc - 1, targv);
+    
+    Application app = application_construct(targc - 1, targv);
 
-    Error error = argumentlist_validate(&al);
+    application_run(&app);
 
-    if(error.code != ERROR_NONE) {
-        printf("Error: %s\n", error.msg);
-        if(error.fatal) {
-            argumentlist_destruct(&al);
-            return 1;
-        }
-    }
-
-    argumentlist_print(&al);
-
-    argumentlist_destruct(&al);
+    application_destruct(&app);
 
     return 0;
 }
