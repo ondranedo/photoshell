@@ -5,7 +5,7 @@
  */
 
 #include <application.h>
-#include <arguments.h>
+#include <argument.h>
 
 // TODO: Remove
 #include <stdio.h>
@@ -21,10 +21,6 @@ Application application_construct(int argc, char** argv) {
     errorhandler_handle();
 
     return app;
-}
-
-void application_run(Application* self) {
-    argumentlist_print(&self->argument_list);
 }
 
 void application_destruct(Application* self) {

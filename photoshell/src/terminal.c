@@ -1,11 +1,11 @@
 #include <application.h>
 
 ArgumentTemplate template[] = {
-    {"version", 'v', ENTRYPARAM_VERSION, ENTRYPARAM_VOID | ENTRYPARAM_UNAMBIGUOUS},
-    {"help", 'h', ENTRYPARAM_HELP,ENTRYPARAM_VOID | ENTRYPARAM_UNAMBIGUOUS},
-    {"input", 'i', ENTRYPARAM_INPUT, ENTRYPARAM_STRING | ENTRYPARAM_REQUIRED | ENTRYPARAM_UNIQUE },
-    {"output", 'o', ENTRYPARAM_OUTPUT,ENTRYPARAM_STRING | ENTRYPARAM_REQUIRED | ENTRYPARAM_UNIQUE },
-    {.type = ENTRYPARAM_NIL}
+    {"version", 'v', ARGUMENT_VERSION, ARGUMENT_TRAIT_VOID | ARGUMENT_TRAIT_UNAMBIGUOUS},
+    {"help", 'h', ARGUMENT_HELP,ARGUMENT_TRAIT_VOID | ARGUMENT_TRAIT_UNAMBIGUOUS},
+    {"input", 'i', ARGUMENT_INPUT, ARGUMENT_TRAIT_STRING | ARGUMENT_TRAIT_REQUIRED | ARGUMENT_TRAIT_UNIQUE },
+    {"output", 'o', ARGUMENT_OUTPUT,ARGUMENT_TRAIT_STRING | ARGUMENT_TRAIT_REQUIRED | ARGUMENT_TRAIT_UNIQUE },
+    {.type = ARGUMENT_EOL}
 };
 
 int main(int argc, char** argv) {
@@ -15,11 +15,9 @@ int main(int argc, char** argv) {
         "#"};
     int targc = 0; while(targv[targc++][0] != '#');
 
-    argumenttemplate_set(template);
-    
-    Application app = application_construct(targc - 1, targv);
+    argument_set_template(template);
 
-    application_run(&app);
+    Application app = application_construct(targc - 1, targv);
 
     application_destruct(&app);
 

@@ -7,7 +7,7 @@
 #ifndef APPLICATION_H
 #define APPLICATION_H
 
-#include <arguments.h>
+#include <argument.h>
 #include <error.h>
 
 typedef struct {
@@ -16,9 +16,6 @@ typedef struct {
 } Application;
 
 API Application application_construct(int argc, char** argv);
-
-API void application_run(Application* self);
-
-API void application_destruct(Application* self);
+API void        application_destruct(Application* self);
 
 #endif //APPLICATION_H

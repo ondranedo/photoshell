@@ -30,12 +30,9 @@ typedef struct {
 } ErrorHandler;
 
 API ErrorHandler errorhandler_construct(u128 default_max_count);
-
-API void errorhandler_destruct(ErrorHandler* self);
-
-API void errorhandler_set(ErrorHandler* handler);
-
-API void errorhandler_handle();
+API void         errorhandler_destruct(ErrorHandler* self);
+API void         errorhandler_set(ErrorHandler* handler);
+API void         errorhandler_handle();
 
 API void error_throw(ErrorCode code, const char* msg, bool fatal);
 
