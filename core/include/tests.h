@@ -11,10 +11,10 @@
 
 #include <errors.h>
 
-extern Error _init_tests(); /* Tests executed right after entrypoint */
+extern Error init_tests(); /* Tests executed right after entrypoint */
 
 // Defines
-    #define INIT_TESTS() _init_tests()
+    #define INIT_TESTS() init_tests()
 #else
     #define INIT_TESTS() {}
 #endif

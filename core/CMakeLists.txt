@@ -8,15 +8,14 @@ add_library(${core_target} SHARED
         ${core_include}/tests.h
         ${core_include}/errors.h
         ${core_include}/application.h
-        ${core_include}/entryparam.h
+        ${core_include}/arguments.h
 
         #SRC
         ${src}/entrypoint.c
         ${src}/tests.c
-        ${src}/entryparam.c
         ${src}/application.c
         ${src}/string.c
-        ${src}/entryparam.c
+        ${src}/arguments.c
 )
 
 target_include_directories(${core_target} PUBLIC ${core_include})

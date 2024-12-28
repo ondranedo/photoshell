@@ -6,7 +6,7 @@
 
 #include <application.h>
 
-Application application_construct(EntryparamList* ep) {
+Application application_construct(ArgumentList* ep) {
     Application app = {0};
 
     return app;
