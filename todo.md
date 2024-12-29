@@ -1,8 +1,9 @@
 # TODO
 ## Main
-- [x] Argument taking
-- [ ] Image struct
-- [ ] Command Queue
+1. [x] Argument taking
+2. [ ] Image struct
+3. [ ] Command Queue
+4. [ ] Amalgamate
 
 ## Utility
 - [ ] Vector "class"

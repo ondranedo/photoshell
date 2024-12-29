@@ -23,7 +23,8 @@ const char* argument_type_to_string(ArgumentType type) {
         case ARGUMENT_HELP: return "Help";
         case ARGUMENT_EOL: return "End of list";
     }
-    return "<missing_value>at[const char* argument_type_to_string(ArgumentType type)]";
+    error_throw(ERROR_RUNT, "Unknown ArgumentType", false);
+    return "<missing_value>";
 }
 
 void argument_set_template(const ArgumentTemplate* template) {

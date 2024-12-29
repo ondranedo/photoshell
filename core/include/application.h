@@ -18,4 +18,5 @@ typedef struct {
 API Application application_construct(int argc, char** argv);
 API void        application_destruct(Application* self);
 
+
 #endif //APPLICATION_H

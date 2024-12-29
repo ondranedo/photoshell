@@ -15,6 +15,7 @@ typedef enum : u8 {
     ERROR_NONE,
     ERROR_TEST,
     ERROR_ARGC,
+    ERROR_RUNT,
     ERROR_NIL
 } ErrorCode;
 
