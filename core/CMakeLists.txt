@@ -10,6 +10,8 @@ add_library(${core_target} SHARED
         ${core_include}/application.h
         ${core_include}/argument.h
         ${core_include}/image.h
+        ${core_include}/command.h
+        ${core_include}/image-tga.h
 
         #SRC
         ${src}/entrypoint.c
@@ -17,7 +19,9 @@ add_library(${core_target} SHARED
         ${src}/string.c
         ${src}/argument.c
         ${src}/error.c
-        src/image.c
+        ${src}/image.c
+        ${src}/command.c
+        ${src}/image-tga.c
 )
 
 target_include_directories(${core_target} PUBLIC ${core_include})

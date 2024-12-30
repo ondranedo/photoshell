@@ -28,7 +28,7 @@ typedef struct {
 
 typedef void(*ImageConvertFn)(u8* old, u128 old_size, u8* new, u128 new_size);
 
-API Image image_construct(/* ImageConstructorFn image_constructor */);
+API Image image_construct(u128 width, u128 height, ImageType type);
 API Image image_construct_cut(const Image* self, u128 ulx, u128 uly, u128 lrx, u128 lry);
 API void  image_destruct(Image* self);
 

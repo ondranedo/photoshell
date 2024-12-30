@@ -13,23 +13,14 @@
 #include <string.h>
 #include <math.h>
 
-Image image_construct(/* ImageConstructorFn image_constructor */) {
+Image image_construct(u128 width, u128 height, ImageType type) {
     Image image = {
-        .mem = malloc(sizeof(PixelRGB)*25), .type = IMAGE_RGB, .height = 5, .width = 5, .valid = true
+        .mem = malloc(width*height*image_type_size(type)*sizeof(u8)),
+        .type = type,
+        .height = height,
+        .width = width,
+        .valid = true
     };
-    u128 j, i = 0;
-    for(; i < image.height; ++i) {
-        for(j = 0; j < image.width; ++j) {
-            PixelRGB pixel = (PixelRGB){0x00, 0x00, 0x00};
-            if(i == j && i == 0) pixel = (PixelRGB){0xAA, 0x00, 0x00};
-            if(i == j && i == 1) pixel = (PixelRGB){0xBB, 0x00, 0x00};
-            if(i == j && i == 2) pixel = (PixelRGB){0xCC, 0x00, 0x00};
-            if(i == j && i == 3) pixel = (PixelRGB){0xDD, 0x00, 0x00};
-            if(i == j && i == 4) pixel = (PixelRGB){0xEE, 0x00, 0x00};
-
-            image_set_pixel_raw(&image, j, i, &pixel.r);
-        }
-    }
 
     return image;
 }

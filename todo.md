@@ -1,9 +1,10 @@
 # TODO
 ## Main
 1. [x] Argument taking
-2. [ ] Image struct
-3. [ ] Command Queue
-4. [ ] Amalgamate
+2. [x] Image struct
+3. [x] Commands
+4. [x] TGA Reader
+5. [ ] Amalgamate
 
 ## Utility
 - [ ] Vector "class"

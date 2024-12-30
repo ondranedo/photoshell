@@ -27,6 +27,10 @@ const char* argument_type_to_string(ArgumentType type) {
     return "<missing_value>";
 }
 
+const char* argument_get_string(Argument* argument) {
+    return argument->payload.string;
+}
+
 void argument_set_template(const ArgumentTemplate* template) {
     if(!template_list)
         template_list = template;
@@ -152,6 +156,15 @@ void argumentlist_destruct(ArgumentList* self) {
     }
 
     free(self->list);
+}
+
+Argument* argumentlist_get(ArgumentList* self, ArgumentType type) {
+    u128 i = 0;
+    for(; i < self->count; ++i) {
+        if(self->list[i].type == type)
+            return self->list + i;
+    }
+    return 0;
 }
 
 void argumentlist_print(ArgumentList* self) {

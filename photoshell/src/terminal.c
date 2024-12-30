@@ -10,14 +10,16 @@ ArgumentTemplate template[] = {
 
 int main(int argc, char** argv) {
     char* targv[] = {"Program-name",
-        "-i", "input.tga",
-        "-o", "output.tga",
+        "-i", "/home/nedo/dev/photoshell/img/input.tga",
+        "-o", "/home/nedo/dev/photoshell/img/output.tga",
         "#"};
     int targc = 0; while(targv[targc++][0] != '#');
 
     argument_set_template(template);
 
     Application app = application_construct(targc - 1, targv);
+
+    //application_perform_command(&app, COMMAND_RESIZE, &(CommandResize){.h = 100, .w = 200});
 
     application_destruct(&app);
 
