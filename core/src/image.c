@@ -1,5 +1,5 @@
 /*
- *  Ondrej Nedojedly 
+ *  Ondrej Nedojedly
  *     https://github.com/ondranedo/photoshell
  *  Created: 2024/12/29
  */
@@ -26,10 +26,10 @@ Image image_construct(u128 width, u128 height, ImageType type) {
 }
 
 Image image_construct_cut(const Image* self, u128 ulx, u128 uly, u128 lrx, u128 lry) {
-    Image image = *self;
+    Image image = { 0 };
     u128 j, i;
-    lrx+=1;
-    lry+=1;
+    //lrx+=1;
+    //lry+=1;
     if(ulx >= lrx || uly >= lry) {
         error_throw(ERROR_RUNT, "Upper left corner invalid position relative to lower right corner.", false);
         image.valid = false;
@@ -41,6 +41,7 @@ Image image_construct_cut(const Image* self, u128 ulx, u128 uly, u128 lrx, u128 
         image.valid = false;
         return image;
     }
+    image = *self;
     image.width = lrx - ulx;
     image.height = lry - uly;
     image.mem = malloc(image_type_size(image.type)*image.width*image.height*sizeof(u8));
@@ -117,35 +118,49 @@ void image_convert(Image* self, ImageType new_type, ImageConvertFn convert_fn) {
 
 void image_crop(Image* self, u128 ulx, u128 uly, u128 lrx, u128 lry) {
     Image image = image_construct_cut(self, ulx, uly, lrx, lry);
-    image_destruct(self);
-    *self = image;
+    if(image.valid) {
+        image_destruct(self);
+        *self = image;
+    } else
+        image_destruct(&image);
+}
+
+void image_place_over(Image* self, u128 x, u128 y, Image* other_img) {
+    u128 j, i = y;
+
+    for(; i < self->height; ++i) {
+        for(j = x; j < self->width; ++j) {
+            if((i - y) < other_img->height && (j - x) < other_img->width) {
+                u8* raw = image_get_pixel_raw(other_img, j - x,i - y);
+                image_set_pixel_raw(self, j, i, raw);
+            }
+        }
+    }
 }
 
 void image_roll_left(Image* self, u128 count) {
-    u128 k, j, i = 0;
-    u8 tmp;
-    for(; i < self->height; ++i) {
-        for(k = 0; k < (count%self->width); ++k) {
-            tmp = *image_get_pixel_raw(self, 0, i);
-            for(j = 1; j < self->width; ++j)
-                image_set_pixel_raw(self, j - 1, i, image_get_pixel_raw(self, j, i));
-            image_set_pixel_raw(self, self->width - 1, i, &tmp);
-        }
-    }
+    image_roll(self, count, 0);
 }
 
 void image_roll_up(Image* self, u128 count) {
-    u128 k, j = 0, i;
-    u8 tmp;
-    for(; j < self->width; ++j) {
-        for(k = 0; k < (count%self->height); ++k) {
-            tmp = *image_get_pixel_raw(self, j, 0);
-            for(i = 1; i < self->height; ++i) {
-                image_set_pixel_raw(self, j, i - 1, image_get_pixel_raw(self, j, i));
-            }
-            image_set_pixel_raw(self, j, self->height - 1, &tmp);
+    image_roll(self, 0, count);
+}
+
+void image_roll(Image* self, u128 left_to_right, u128 top_to_bottom) {
+    Image copy = image_construct_cut(self, 0, 0, self->width, self->height);
+    u128 j, i = 0;
+
+    for(; i < self->height; ++i) {
+        for(j = 0; j < self->width; ++j) {
+            u8* raw = image_get_pixel_raw(self,
+                (j + left_to_right)%self->width,
+                (i + top_to_bottom)%self->height);
+            image_set_pixel_raw(&copy, j, i, raw);
         }
     }
+
+    image_destruct(self);
+    *self = copy;
 }
 
 void image_resize(Image* self, u128 new_width, u128 new_height) {
@@ -162,8 +177,8 @@ void image_resize(Image* self, u128 new_width, u128 new_height) {
         for(j = 0; j < image.width; ++j) {
             jj = floor(((f64)(j))*width_scale);
             ii = floor(((f64)(i))*height_scale);
-            u8 raw = *image_get_pixel_raw(self, jj, ii);
-            image_set_pixel_raw(&image, j, i, &raw);
+            u8* raw = image_get_pixel_raw(self, jj, ii);
+            image_set_pixel_raw(&image, j, i, raw);
         }
     }
 

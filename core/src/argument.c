@@ -167,6 +167,15 @@ Argument* argumentlist_get(ArgumentList* self, ArgumentType type) {
     return 0;
 }
 
+bool argumentlist_has(ArgumentList* self, ArgumentType type) {
+    u128 i = 0;
+    for(; i < self->count; ++i) {
+        if(self->list[i].type == type)
+            return true;
+    }
+    return false;
+}
+
 void argumentlist_print(ArgumentList* self) {
     u128 i = 0;
     for(;i < self->count; ++i) {
@@ -194,11 +203,12 @@ static inline void _validate_required(ArgumentList* list, ArgumentType* required
 
     for(;i < list->count; ++i) {
         for(j = 0; j < argumenttemplate_count_traits(ARGUMENT_TRAIT_REQUIRED); ++j)
-            if(list->list[i].type == required[j]) required[j] = ARGUMENT_TRAIT_VOID;
+            if(list->list[i].type == required[j])
+                required[j] = ARGUMENT_EOL;
     }
 
     for(i = 0; i < argumenttemplate_count_traits(ARGUMENT_TRAIT_REQUIRED); ++i) {
-        if(required[i] == ARGUMENT_TRAIT_VOID) continue;
+        if(required[i] == ARGUMENT_EOL) continue;
         snprintf(buff, ERROR_MSG_MAX_SIZE, "REQUIRED argument trait violated with argument \'%s\'.", argument_type_to_string(required[i]));
         error_throw(ERROR_ARGC, buff, true);
     }

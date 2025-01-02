@@ -24,16 +24,18 @@ CommandHandler commandhandler_construct() {
     CommandHandler handler = {0};
     while(COMMAND_NONE + handler.function_count++ != COMMAND_EOL);
     handler.function_count-=1;
+    handler.function = malloc(sizeof(CommandFn)*handler.function_count);
+    return handler;
 }
 
 void commandhandler_destruct(CommandHandler* self) {
-
+    free(self->function);
 }
 
 void commandhandler_set_execute_fn(CommandHandler* handler, CommandType type, CommandFn fn) {
-    handler->function[type] = fn;
+    handler->function[type - 1] = fn;
 }
 
 CommandFn commandhandler_get_execute_fn(CommandHandler* handler, CommandType type) {
-    return handler->function[type];
+    return handler->function[type - 1];
 }

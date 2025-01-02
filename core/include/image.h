@@ -36,9 +36,10 @@ API void image_print(const Image* self);
 API u128 image_type_size(const ImageType type);
 API void image_convert(Image* self, ImageType type, ImageConvertFn convert_fn);
 API void image_crop(Image* self, u128 ulx, u128 uly, u128 lrx, u128 lry);
-API void image_roll_left(Image* self, u128 count);
-API void image_roll_up(Image* self, u128 count);
+API void image_place_over(Image* self, u128 x, u128 y, Image* other_img);
+API void image_roll(Image* self, u128 left_to_right, u128 top_to_bottom);
 API void image_resize(Image* self, u128 new_width, u128 new_height);
+
 
 API u8*        image_get_pixel_raw(const Image* self, u64 x, u64 y);
 API PixelBW*   image_get_pixel_bw(const Image* self, u64 x, u64 y);

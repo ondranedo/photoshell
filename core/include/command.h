@@ -25,7 +25,7 @@ typedef enum {
 typedef struct { u128 w, h; } CommandResize;
 typedef struct { u128 x, y, w, h; } CommandCrop;
 typedef struct { u128 x1, x2, y1, y2, w, h; } CommandCopy;
-typedef struct { u128 x, y; } CommandMove;
+typedef struct { i128 x, y; } CommandMove;
 
 typedef void(*CommandFn)(void* application, void* data);
 

@@ -63,6 +63,7 @@ API ArgumentList argumentlist_construct(int argc, char** argv);
 API void         argumentlist_validate(ArgumentList* list);
 API void         argumentlist_destruct(ArgumentList* self);
 API Argument*    argumentlist_get(ArgumentList* self, ArgumentType type);
+API bool         argumentlist_has(ArgumentList* self, ArgumentType type);
 
 API u128 argumenttemplate_count_traits(ArgumentTraits traits);
 API u128 argumenttemplate_get_specific_types(ArgumentType* type, u128 max_count, ArgumentTraits traits);

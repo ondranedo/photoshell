@@ -4,7 +4,7 @@
 2. [x] Image struct
 3. [x] Commands
 4. [x] TGA Reader
-5. [ ] Amalgamate
+5. [x] Amalgamate
 
 ## Utility
 - [ ] Vector "class"
