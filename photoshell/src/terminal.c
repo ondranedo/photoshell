@@ -93,11 +93,19 @@ void handle_line(Application* app, char* line) {
     const char* delim = " ,";
     char* token = strtok(line, delim);
     i64* data = 0, data_count = 0;
-    TCommand command = tcommand_find_by_name(token);
+    TCommand command;
+
+    if(strlen(line) >= 1)
+        if(line[strlen(line) - 1] == '\n')
+            line[strlen(line) - 1] = '\0';
+
+    command = tcommand_find_by_name(token);
+
     if(!strcmp(command.name, "eol")) {
         error_throw(ERROR_RUNT, "Unknown command, run 'help'.", false);
         return;
     }
+
     data = malloc(command.argc*sizeof(i64));
     do {
         token = strtok(NULL, delim);
@@ -122,8 +130,6 @@ int main(int argc, char** argv) {
 
     while(app.running) {
         fgets(buff, 256, stdin);
-        //remove '\n'
-        buff[strlen(buff) - 1] = 0;
         handle_line(&app, buff);
         errorhandler_handle();
     }

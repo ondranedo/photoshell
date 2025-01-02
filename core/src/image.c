@@ -163,6 +163,21 @@ void image_roll(Image* self, u128 left_to_right, u128 top_to_bottom) {
     *self = copy;
 }
 
+void image_flip_horizontal(Image* self) {
+    Image copy = image_construct_cut(self, 0, 0, self->width, self->height);
+    u128 j = 0, i = 0;
+    if(!copy.valid) return;
+    for(; j < self->width; ++j) {
+        for(i = 0; i < self->height; ++i) {
+            u8* raw = image_get_pixel_raw(self, j, self->height - i - 1);
+            image_set_pixel_raw(&copy, j, i, raw);
+        }
+    }
+
+    image_destruct(self);
+    *self = copy;
+}
+
 void image_resize(Image* self, u128 new_width, u128 new_height) {
     Image image = *self;
     u128 j, i = 0, jj, ii;

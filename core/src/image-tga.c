@@ -16,6 +16,7 @@
 Image _construct_tga(TGAHeader* header) {
     ImageType type;
     Image image;
+
     switch(header->bits_per_pixel/8) {
         case 1: type = IMAGE_BW; break;
         case 3: type = IMAGE_RGB; break;
@@ -24,7 +25,9 @@ Image _construct_tga(TGAHeader* header) {
             error_throw(ERROR_RUNT, "Unknown TGA bits_per_pixel", true);
         return image_construct(1, 1, IMAGE_BW);
     }
+
     image = image_construct(header->width, header->height, type);
+
     return image;
 }
 
@@ -49,6 +52,10 @@ Image image_construct_tga(const char* path) {
     image = _construct_tga(&header);
     fread(image.mem, image.width*image.height*image_type_size(image.type), 1, file);
     fclose(file);
+
+    if(header.image_descriptor & (1 << 5)) {
+        image_flip_horizontal(&image);
+    }
 
     return image;
 }
