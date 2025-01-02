@@ -131,8 +131,8 @@ void image_place_over(Image* self, u128 x, u128 y, Image* other_img) {
     for(; i < self->height; ++i) {
         for(j = x; j < self->width; ++j) {
             if((i - y) < other_img->height && (j - x) < other_img->width) {
-                u8* raw = image_get_pixel_raw(other_img, j - x,i - y);
-                image_set_pixel_raw(self, j, i, raw);
+                u8* raw = image_get_pixel_raw(other_img, other_img->width - j, other_img->height - i);
+                image_set_pixel_raw(self, j - x, i - y, raw);
             }
         }
     }

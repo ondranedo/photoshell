@@ -23,7 +23,7 @@ void command_crop(Application* application, CommandCrop* data) {
 void command_copy(Application* application, CommandCopy* data) {
     Image image = image_construct_cut(&application->image, data->x1, data->y1, data->x1 + data->w, data->y1 + data->h);
     if(image.valid) {
-        image_place_over(&application->image, data->y1, data->y2, &image);
+        image_place_over(&application->image, data->x2, data->y2, &image);
         image_destruct(&image);
     }
 }
