@@ -97,13 +97,11 @@ Argument argument_construct_number(ArgumentType type, double number) {
 }
 
 bool argument_validate(const char* name) {
-    auto type = argument_string_to_type(name);
-    return type != ARGUMENT_EOL;
+    return argument_string_to_type(name) != ARGUMENT_EOL;
 }
 
 void argument_destruct(Argument* self) {
-    auto traits = argument_type_to_traits(self->type);
-    if(traits & ARGUMENT_TRAIT_STRING)
+    if(argument_type_to_traits(self->type) & ARGUMENT_TRAIT_STRING)
         free(self->payload.string);
 }
 
@@ -115,12 +113,14 @@ inline char* _parse_argv_param(char* argv) {
     return argv + string_count_front(argv, '-');
 }
 
-inline ArgumentTraits _handle_new_param(ArgumentList* epl, ArgumentTraits* traits, bool* mode, char* raw) {
+inline bool _handle_new_param(ArgumentList* epl, ArgumentTraits* traits, bool* mode, char* raw) {
     if(*mode || !argument_validate(_parse_argv_param(raw))) return false;
     epl->list[epl->count].type = argument_string_to_type(_parse_argv_param(raw));
     *traits = argument_type_to_traits(epl->list[epl->count].type);
-    if(*traits & ARGUMENT_TRAIT_NUMBER || *traits & ARGUMENT_TRAIT_STRING) *mode = true;
-    else epl->count++;
+    if(*traits & ARGUMENT_TRAIT_NUMBER || *traits & ARGUMENT_TRAIT_STRING)
+        *mode = true;
+    else
+        epl->count++;
     return true;
 }
 
@@ -129,7 +129,7 @@ inline Argument _create_new_param(ArgumentType type, ArgumentTraits traits, char
     //                                                                          v
     return traits & ARGUMENT_TRAIT_NUMBER ? argument_construct_number(type, atof(raw)) :
            traits & ARGUMENT_TRAIT_STRING ? argument_construct_string(type, raw) :
-           (Argument){type, NULL};
+           (Argument){.type = type};
 }
 
 ArgumentList argumentlist_construct(int argc, char** argv) {
@@ -138,7 +138,7 @@ ArgumentList argumentlist_construct(int argc, char** argv) {
     u128 i = 0;
     ArgumentTraits traits = ARGUMENT_TRAIT_VOID;
 
-    for(;i < argc - 1; ++i) {
+    for(;i < (u128)argc - 1; ++i) {
         if(_handle_new_param(&epl, &traits, &input_mode, argv[i + 1])) continue;
         if(input_mode) {
             epl.list[epl.count++] = _create_new_param(epl.list[epl.count].type, traits, argv[i + 1]);

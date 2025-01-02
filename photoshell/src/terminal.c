@@ -20,7 +20,7 @@ typedef void(*TCommandFn)(void* application, i64 argc, i64* argv);
 typedef struct {
     char name[TCOMMAND_NAME_MAX_LENGTH];
     TCommandFn fn;
-    u8 argc;
+    u8 max_count;
 } TCommand;
 
 void tresize(Application* app, i64 argc, i64* argv) {
@@ -76,7 +76,7 @@ static TCommand commands[] = {
     {"save", (TCommandFn)tsave, 0 },
     {"exit", (TCommandFn)texit, 0 },
     {"help", (TCommandFn)thelp, 0 },
-    {"eol", 0}
+    {.name = "eol"}
 };
 
 
@@ -106,16 +106,16 @@ void handle_line(Application* app, char* line) {
         return;
     }
 
-    data = malloc(command.argc*sizeof(i64));
+    data = malloc(command.max_count*sizeof(i64));
     do {
         token = strtok(NULL, delim);
-        if(token && data_count < command.argc) {
+        if(token && data_count < command.max_count) {
             const i64 res = atoi(token);
             data[data_count++] = res;
         }
     } while(token);
 
-    if(data_count == command.argc)
+    if(data_count == command.max_count)
         command.fn(app, data_count, data);
 
     free(data);

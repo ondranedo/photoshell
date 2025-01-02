@@ -16,10 +16,6 @@ void command_destruct(Command* self) {
         free(self->payload);
 }
 
-void command_set_execute_fn(CommandType type, CommandFn fn) {
-
-}
-
 CommandHandler commandhandler_construct() {
     CommandHandler handler = {0};
     while(COMMAND_NONE + handler.function_count++ != COMMAND_EOL);
