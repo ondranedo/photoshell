@@ -63,7 +63,7 @@ Application application_construct(int argc, char** argv) {
     Application app = {
         .argument_list = argumentlist_construct(argc, argv),
         .command_handler = commandhandler_construct(),
-        .running = true, /* false in case of main loop */
+        .running = false,
         .valid = true };
 
     argumentlist_validate(&app.argument_list);
@@ -75,6 +75,7 @@ Application application_construct(int argc, char** argv) {
     else if(argumentlist_has(&app.argument_list, ARGUMENT_VERSION)) {
         printf("Version 0.1\n");
     } else if(argumentlist_has(&app.argument_list, ARGUMENT_INPUT)) {
+        app.running = true;
         commandhandler_set_execute_fn(&app.command_handler, COMMAND_RESIZE, (CommandFn)command_resize);
         commandhandler_set_execute_fn(&app.command_handler, COMMAND_CROP, (CommandFn)command_crop);
         commandhandler_set_execute_fn(&app.command_handler, COMMAND_COPY, (CommandFn)command_copy);
