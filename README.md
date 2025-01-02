@@ -11,6 +11,5 @@
 ```bash
 ./photoshell --input input_file.tga --output output_file.tga
 ./photoshell -i input.tga -o output.tga
-./photoshell --help
 ./photoshell --version
 ```
